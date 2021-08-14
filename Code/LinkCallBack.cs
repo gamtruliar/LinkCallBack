@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using IPGameServer.CommonLib.Log;
 using Script.CommonLib.Caching;
-using UnityEngine;
+
 /*
  *Simple async control 
  *usage:
@@ -103,7 +101,7 @@ namespace LinkCallBack2
 				return new LinkCallBack<T>();
 			}
 			if (cbSetted && !isReusable) {
-				LCBCommon.Debug?.LogError ("link call back, SetCB has beed called 2+ times, non time related attr break|"+StackTraceUtility.ExtractStackTrace());
+				LCBCommon.Debug?.LogError ("link call back, SetCB has beed called 2+ times, non time related attr break|");
 			}
 			if (nextLinkCB == null ){
 				

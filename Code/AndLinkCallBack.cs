@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 /*
  * Wait All
  * AndLinkCallBack is used to  wait all branch finish
@@ -48,7 +47,7 @@ namespace LinkCallBack2
 
         public LinkCallBack<object> callbackRespond(ILinkCallBack orgLcb,object obj,int id){
             if (Callbacks_ret_Para [id] != null) {
-                LCBCommon.Debug?.LogError ("Don't use many trigger LCB in GroupedLinkCallback"+StackTraceUtility.ExtractStackTrace());
+                LCBCommon.Debug?.LogError ("Don't use many trigger LCB in GroupedLinkCallback");
                 return null;
             }
 
@@ -92,7 +91,7 @@ namespace LinkCallBack2
             if (nonCalledBack_Callbacks_Count == 0) {
                 finishedCallCnt++;
                 if (finishedCallCnt > 1) {
-                    LCBCommon.Debug?.LogError ("GLCB: over trigger:" + StackTraceUtility.ExtractStackTrace ());
+                    LCBCommon.Debug?.LogError ("GLCB: over trigger:" );
                 }
                 finalCB.Trigger (Callbacks_ret_Para);
             }

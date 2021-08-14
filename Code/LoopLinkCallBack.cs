@@ -35,71 +35,87 @@ using LinkCallBack2;
 	xxx->LoopLCB->Handle Loop Content(xxx)->[continues?] --No--> CB
 *                ^<----------loop 1----------<-NO-v
  * */
-
-public class LoopLinkCallBack<RETTYPE>:LinkCallBack<RETTYPE>
+namespace LinkCallBack2
 {
-	LinkCallBack<RETTYPE> midLinkCallBack;
-	Func<LoopLinkCallBack<RETTYPE>,RETTYPE,int,LinkCallBack<RETTYPE>> m_loopContent;
-	private bool m_isSafe;
-
-	private ILinkCallBackTriggerExecutor m_executor;
-	public LoopLinkCallBack():base(){
-		midLinkCallBack=new LinkCallBack<RETTYPE>();
-	}
-	public static LoopLinkCallBack<RETTYPE> DirectTrigger_Loop(RETTYPE para=default(RETTYPE)){
-		var ret = new LoopLinkCallBack<RETTYPE> ();
-		ret.Trigger (para);
-		return ret;
-	}
-
-	public LoopLinkCallBack<RETTYPE> setLoop(Func<LoopLinkCallBack<RETTYPE>, RETTYPE, int, LinkCallBack<RETTYPE>> loopContent,ILinkCallBackTriggerExecutor executor = null){
-		
-		return setLoop_i(  loopContent, executor);
-	}
-
-
-	
-
-	LinkCallBack<RETTYPE> loopFnST(RETTYPE x)
+	public class LoopLinkCallBack<RETTYPE> : LinkCallBack<RETTYPE>
 	{
-		return loopFn(x, 0);
-	}
-	LinkCallBack<RETTYPE> loopFn(RETTYPE x,int cnt)
-	{
-		if (m_loopContent == null) return null;
-		// ////Profiler.BeginSample("LoopLinkCallBack:loopContent");
-		var retcb = m_loopContent(this, x, cnt);
-		// ////Profiler.EndSample();
-		//////Profiler.EndSample();
-		if (retcb == null)
+		LinkCallBack<RETTYPE> midLinkCallBack;
+		Func<LoopLinkCallBack<RETTYPE>, RETTYPE, int, LinkCallBack<RETTYPE>> m_loopContent;
+		private bool m_isSafe;
+
+		private ILinkCallBackTriggerExecutor m_executor;
+
+		public LoopLinkCallBack() : base()
+		{
+			midLinkCallBack = new LinkCallBack<RETTYPE>();
+		}
+
+		public static LoopLinkCallBack<RETTYPE> DirectTrigger_Loop(RETTYPE para = default(RETTYPE))
+		{
+			var ret = new LoopLinkCallBack<RETTYPE>();
+			ret.Trigger(para);
+			return ret;
+		}
+
+		public LoopLinkCallBack<RETTYPE> setLoop(
+			Func<LoopLinkCallBack<RETTYPE>, RETTYPE, int, LinkCallBack<RETTYPE>> loopContent,
+			ILinkCallBackTriggerExecutor executor = null)
+		{
+
+			return setLoop_i(loopContent, executor);
+		}
+
+
+
+
+		LinkCallBack<RETTYPE> loopFnST(RETTYPE x)
+		{
+			return loopFn(x, 0);
+		}
+
+		LinkCallBack<RETTYPE> loopFn(RETTYPE x, int cnt)
+		{
+			if (m_loopContent == null) return null;
+			// ////Profiler.BeginSample("LoopLinkCallBack:loopContent");
+			var retcb = m_loopContent(this, x, cnt);
+			// ////Profiler.EndSample();
+			//////Profiler.EndSample();
+			if (retcb == null)
+				return null;
+
+			retcb.setExecutor(m_executor).SetCB((y) => loopFn(y, cnt + 1));
 			return null;
-		
-		retcb.setExecutor(m_executor).SetCB((y)=>loopFn(y,cnt+1));
-		return null;
+		}
+
+		LoopLinkCallBack<RETTYPE> setLoop_i(
+			Func<LoopLinkCallBack<RETTYPE>, RETTYPE, int, LinkCallBack<RETTYPE>> loopContent,
+			ILinkCallBackTriggerExecutor executor = null)
+		{
+
+			m_loopContent = loopContent;
+
+			m_executor = executor;
+
+
+			midLinkCallBack.SetCB(loopFnST);
+
+			return this;
+		}
+
+		public void LoopEnd(RETTYPE obj = default(RETTYPE))
+		{
+			m_loopContent = null;
+			m_isSafe = false;
+			m_executor = null;
+			base.Trigger(obj);
+		}
+
+		public override void Trigger(RETTYPE obj = default(RETTYPE))
+		{
+			midLinkCallBack.Trigger(obj);
+		}
+
 	}
-	LoopLinkCallBack<RETTYPE> setLoop_i(Func<LoopLinkCallBack<RETTYPE>,RETTYPE,int,LinkCallBack<RETTYPE>> loopContent,ILinkCallBackTriggerExecutor executor=null){
-		
-		m_loopContent = loopContent;
-		
-		m_executor = executor;
-		
-		
-			midLinkCallBack.SetCB ( loopFnST);
-		
-		return this;
-	}
-	
-	public void LoopEnd(RETTYPE obj=default(RETTYPE)){
-		m_loopContent = null;
-		m_isSafe = false;
-		m_executor = null;
-		 base.Trigger (obj);
-	}
-	
-	public override void Trigger(RETTYPE obj=default(RETTYPE)){
-		 midLinkCallBack.Trigger(obj);
-	}
-	
+
+
 }
-
-

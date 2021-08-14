@@ -1,6 +1,10 @@
 ﻿
 using System;
 
-public interface ILinkCallBackTriggerExecutor{
-	void run(Action act);
+namespace LinkCallBack2
+{
+	public interface ILinkCallBackTriggerExecutor
+	{
+		void run(Action act);
+	}
 }
