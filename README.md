@@ -3,27 +3,27 @@
 Async Control
 
 LinkCallBack:
-Simple async control 
- -pass callback by return value 
- -Simple Convert from/to callback, event, Task
- 
+Simple async control
+	-pass callback by return value
+	-Simple Convert from/to callback, event, Task
+
 usage:
 
  caller:
   // do Callee=>Callee=>finish
- 
+
  Callee().SetCB(x=>{
 		task finish x is ret
 		return Callee();
- }) 
+ })
  .SetCB_End(x=>{
-      task finish again x is ret
+	 task finish again x is ret
  });
 
  callee:
  LinkCallBack<Return Type> Callee(){
 		var retLCB=new LinkCallBack<Return Type>();
-      //traditional CallBack
+	 //traditional CallBack
 		asyncOP((ret)=>{
 			retLCB.Trigger(ret);
 		});
@@ -31,42 +31,42 @@ usage:
  }
 
  AndLinkCallBack:
- -Wait All
- - AndLinkCallBack is used to  wait all branch finish
-   trigger by your own/ other ways
-     L  L L.....
-     \   |   /    para of Final L ( Object of one L result)
-     final L
+	-Wait All
+	- AndLinkCallBack is used to  wait all branch finish
+	trigger by your own/ other ways
+	L  L L.....
+	\	|	/	 para of Final L ( Object of one L result)
+	final L
 
-    Final will be trigger  if and only if all L are Triggered
-  * if addCB after FinishAddCB, all CB WILL BE ignored and log an error
+	 Final will be trigger  if and only if all L are Triggered
+	* if addCB after FinishAddCB, all CB WILL BE ignored and log an error
 
-     usage :
-     trigger with same para
+	usage :
+	trigger with same para
 
-     non trigger only wait:
-     new AndLinkCallBack("wa").AddCB(a).AddCB(b).AddCB(c).FinishAddCB().SetCB(xxxx)
+	non trigger only wait:
+	new AndLinkCallBack("wa").AddCB(a).AddCB(b).AddCB(c).FinishAddCB().SetCB(xxxx)
 
 OrLinkCallBack:
- -Race
- -OrLinkCallBack is friend of AndLinkCallBack used to  wait until one branch finish
-   trigger by your own/ other ways
-     L  L L.....
-     \   |   /    para of Final L ( Object of one L result)
-     final L
+	-Race
+	-OrLinkCallBack is friend of AndLinkCallBack used to  wait until one branch finish
+	trigger by your own/ other ways
+	L  L L.....
+	\	|	/	 para of Final L ( Object of one L result)
+	final L
 
-    Final will be trigger  if and only if one L are Triggered
-   ** if addCB after FinishAddCB, all CB WILL BE ignored and log an error
+	 Final will be trigger  if and only if one L are Triggered
+	** if addCB after FinishAddCB, all CB WILL BE ignored and log an error
 
-     usage :
-     trigger with same para
+	usage :
+	trigger with same para
 
-     non trigger only wait:
-     new OrLinkCallBack("wa").AddCB(a).AddCB(b).AddCB(c).FinishAddCB().SetCB(xxxx)
-	 
- LoopLinkCallBack: 
- -loop support of LinkCallBack
- 
+	non trigger only wait:
+	new OrLinkCallBack("wa").AddCB(a).AddCB(b).AddCB(c).FinishAddCB().SetCB(xxxx)
+	
+ LoopLinkCallBack:
+	-loop support of LinkCallBack
+
  Usage:
  setLoop(gameobject,Handle Loop Content)
  new LoopLinkCallBack()
@@ -85,20 +85,20 @@ OrLinkCallBack:
  }).setCB_End((obj)=>{
  		//loop finish
  });
- 
-   stream flow:
-   xxx->LoopLCB->Handle Loop Content->[continues?] --No--> CB
- 	             ^<---------------------<-NO-v
+
+	stream flow:
+	xxx->LoopLCB->Handle Loop Content->[continues?]	--No--> CB
+ 				^<---------------------<-NO-v
 action description:
  when LoopLinkCallBack has been multi-triggered, there will be n loop in the same time but ending in collapsing at one CB
- e.g:  
-		   yyy
-			|	/->Handle Loop Content(yyy)->[continues?] --No-|
-			v	/  ^<----------loop 2----------<-NO-v          v
-	xxx->LoopLCB->Handle Loop Content(xxx)->[continues?] --No--> CB
-                ^<----------loop 1----------<-NO-v
+ e.g: 
+			yyy
+			|	/->Handle Loop Content(yyy)->[continues?]	--No-|
+			v	/  ^<----------loop 2----------<-NO-v		v
+	xxx->LoopLCB->Handle Loop Content(xxx)->[continues?]	--No--> CB
+			 ^<----------loop 1----------<-NO-v
 
 
- 
- 
+
+
  
