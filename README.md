@@ -2,6 +2,8 @@
 
 Async Control Wrapper For C#
 
+**** set LCBCommon.Debug first!!!!
+
 LinkCallBack:
 
 	Simple async control

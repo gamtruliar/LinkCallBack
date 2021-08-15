@@ -245,7 +245,7 @@ namespace LinkCallBack2
         public virtual LinkCallBack<RETTYPE2> Select<RETTYPE2>(Func<RETTYPE,RETTYPE2> selecter) {
 	        return SetCB(x => LinkCallBack<RETTYPE2>.DirectExec(selecter(x)));
         }
-        public void ToSync()
+        public void toSync()
         {
 	        bool tmpTriggered = false;
 	        SetCB_End ((x) => {
@@ -310,7 +310,7 @@ namespace LinkCallBack2
 	        return retLCB;
         }
 
-        public Task<RETTYPE> ToTask()
+        public Task<RETTYPE> toTask()
         {
 	        var task=new TaskCompletionSource<RETTYPE>();
 	        SetCB_End ((x) => {
