@@ -1,6 +1,7 @@
 # LinkCallBack
 
 Async Control Wrapper For C#
+No third runner, only callback object
 
 **** set LCBCommon.Debug first!!!!
 
